@@ -1,11 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
+import os
 
-URl_DATABASE = 'mysql+pymysql://root:dc2zzsT*a@localhost:3306/healthbite'
+db = SQLAlchemy()  # Ensure this is the single instance used everywhere
 
-engine = create_engine(URl_DATABASE)
-
-SessionLocal = sessionmaker(autoflush=False, bind=engine)
-
-Base = declarative_base()
+def create_database(app):
+    with app.app_context():  # Ensure app context is active
+        if not os.path.exists('instance'):
+            os.makedirs('instance')  # Create instance folder if it doesn't exist
+        db.create_all()  # Create all tables
+        print("Debug: Database created successfully")  # Debugging line
