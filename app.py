@@ -27,7 +27,7 @@ def create_app():
     from website.auth import auth
 
     app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')  # Ensure this line exists
 
     from website.models import User
 

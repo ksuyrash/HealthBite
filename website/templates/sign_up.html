@@ -6,7 +6,7 @@ content %}
       <div class="card shadow">
         <div class="card-body">
           <h3 class="text-center">Sign Up</h3>
-          <form method="POST">
+          <form method="POST" action="{{ url_for('auth.sign_up') }}">
             <div class="mb-3">
               <label for="email" class="form-label">Email Address</label>
               <input
@@ -15,6 +15,7 @@ content %}
                 id="email"
                 name="email"
                 placeholder="Enter email"
+                required
               />
             </div>
             <div class="mb-3">
@@ -25,6 +26,7 @@ content %}
                 id="firstName"
                 name="firstName"
                 placeholder="Enter first name"
+                required
               />
             </div>
             <div class="mb-3">
@@ -35,6 +37,7 @@ content %}
                 id="password1"
                 name="password1"
                 placeholder="Enter password"
+                required
               />
             </div>
             <div class="mb-3">
@@ -47,7 +50,49 @@ content %}
                 id="password2"
                 name="password2"
                 placeholder="Confirm password"
+                required
               />
+            </div>
+            <div class="mb-3">
+              <label for="height" class="form-label">Height (in cm)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="height"
+                name="height"
+                placeholder="Enter height in cm"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="weight" class="form-label">Weight (in kg)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="weight"
+                name="weight"
+                placeholder="Enter weight in kg"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="age" class="form-label">Age</label>
+              <input
+                type="number"
+                class="form-control"
+                id="age"
+                name="age"
+                placeholder="Enter age"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="gender" class="form-label">Gender</label>
+              <select class="form-control" id="gender" name="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>
           </form>

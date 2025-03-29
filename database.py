@@ -4,8 +4,7 @@ import os
 db = SQLAlchemy()  # Ensure this is the single instance used everywhere
 
 def create_database(app):
-    with app.app_context():  # Ensure app context is active
-        if not os.path.exists('instance'):
-            os.makedirs('instance')  # Create instance folder if it doesn't exist
-        db.create_all()  # Create all tables
-        print("Debug: Database created successfully")  # Debugging line
+    if not os.path.exists('healthbite.db'):  # Replace with your database file path if using SQLite
+        with app.app_context():
+            db.create_all()
+            print("Database created successfully!")

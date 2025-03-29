@@ -31,37 +31,61 @@ def logout():
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+    print("Debug: sign_up route called")  # Debugging line
     if request.method == 'POST':
+        # Debugging: Print the entire request.form object
+        print(f"Debug: request.form={request.form}")
+
         email = request.form.get('email')
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        height = request.form.get('height') or 0  # Default to 0 if empty
+        weight = request.form.get('weight') or 0  # Default to 0 if empty
+        age = request.form.get('age') or 0  # Default to 0 if empty
+        gender = request.form.get('gender') or "Unknown"  # Default to "Unknown" if empty
 
-        user = User.query.filter_by(email=email).first()
-        if user:
-            flash('An account with this email already exists.', category='error')
-        elif len(email) < 4:
-            flash('Email must be at least 4 characters long.', category='error')
-        elif len(first_name) < 2:
-            flash('First name must be at least 2 characters long.', category='error')
-        elif password1 != password2:
+        # Debugging: Print retrieved form data
+        print(f"Debug: email={email}, first_name={first_name}, password1={password1}, password2={password2}")
+        print(f"Debug: height={height}, weight={weight}, age={age}, gender={gender}")
+
+        # Fallback for missing data
+        if not email or not first_name or not password1 or not password2:
+            flash('All fields are required.', category='error')
+            return render_template('sign_up.html', user=current_user)
+
+        # Validate passwords
+        if password1 != password2:
             flash('Passwords do not match.', category='error')
-        elif len(password1) < 7:
-            flash('Password must be at least 7 characters long.', category='error')
-        else:
-            new_user = User(
-                email=email,
-                first_name=first_name,
-                password_hash=generate_password_hash(password1, method='pbkdf2:sha256')  # ✅ Correct field name
-            )
-            try:
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(new_user, remember=True)
-                flash('Your account has been created!', category='success')
-                return redirect(url_for('views.home'))
-            except Exception as e:
-                db.session.rollback()
-                flash(f"An error occurred: {str(e)}", category="error")
+            return render_template('sign_up.html', user=current_user)
+
+        # Convert and validate numeric fields
+        try:
+            height = float(height) if height else None  # Convert height to float
+            weight = float(weight) if weight else None  # Convert weight to float
+            age = int(age) if age else None  # Convert age to integer
+        except ValueError:
+            flash('Height, weight, and age must be valid numbers.', category='error')
+            return render_template('sign_up.html', user=current_user)
+
+        # Create a new user with the new fields
+        new_user = User(
+            email=email,
+            first_name=first_name,
+            password=generate_password_hash(password1, method='pbkdf2:sha256'),
+            height=height,
+            weight=weight,
+            age=age,
+            gender=gender
+        )
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user, remember=True)
+            flash('Your account has been created!', category='success')
+            return redirect(url_for('views.home'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occurred: {str(e)}", category="error")
 
     return render_template('sign_up.html', user=current_user)
