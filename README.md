@@ -5,7 +5,7 @@ Another important feature will be the account creation process, where users prov
 https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/edit?usp=sharing
 
 
-| Name | What was done | Date |
+| Name | Description | Date |
 |------|---------------|------|
 | Anna | Created checkboxes for criteria| 15.12 |
 | Anna | Checks for at least one checkbox is submitted | 07.01 |
