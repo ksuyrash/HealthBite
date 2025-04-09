@@ -9,3 +9,5 @@ https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/
 |------|---------------|------|
 | Anna | Created checkboxes for criteria| 15.12 |
 | Anna | Checks for at least one checkbox is submitted | 07.01 |
+| Anna | Recipes are shown based on selected criteria | 12.02 |
+| Anna and Ksenija | Finished the tasks given by the other team | 04.03 |
