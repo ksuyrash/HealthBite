@@ -4,3 +4,11 @@ After settling on the concept, we started discussing the main functionalities of
 Another important feature will be the account creation process, where users provide their basic information, including weight, height, age, gender, and their weight or fitness goals. This data will help us create more tailored nutritional plans. A personalized account would allow the user to track their progress over time and adjust their nutritional goals as needed. The platform would offer users the ability to add all their criteria—from dietary restrictions and nutritional goals to ingredients they have at home—before finding best recipes.
 We also plan to include a notifications feature. Users will receive notifications with recommended meals based on their past selections, progress, and goals. This will make the platform more dynamic and engaging, ensuring that users receive updates and meal suggestions that keep them on track with their diet plans.
 https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/edit?usp=sharing
+
+| Name             | Description                                   | Date  |
+| ---------------- | --------------------------------------------- | ----- |
+| Anna             | Created checkboxes for criteria               | 15.12 |
+| Anna             | Checks for at least one checkbox is submitted | 07.01 |
+| Anna             | Recipes are shown based on selected criteria  | 12.02 |
+| Anna and Ksenija | Finished the tasks given by the other team    | 04.03 |
+| Anna             | Fixed bug issue with recipes                  | 08.04 |
