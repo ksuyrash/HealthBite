@@ -14,12 +14,10 @@ class User(db.Model, UserMixin):
     role = db.Column(db.String(50), default='user')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Use datetime.utcnow
     edited_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    # Updated fields for height, weight, age, and gender
-    height = db.Column(db.Float, nullable=True, default=None)  # Allow NULL
-    weight = db.Column(db.Float, nullable=True, default=None)  # Allow NULL
-    age = db.Column(db.Integer, nullable=True, default=None)   # Allow NULL
-    gender = db.Column(db.String(10), nullable=True, default=None)  # Allow NULL
+    height = db.Column(db.Float, nullable=True)  # Height in cm
+    weight = db.Column(db.Float, nullable=True)  # Weight in kg
+    age = db.Column(db.Integer, nullable=True)  # Age in years
+    gender = db.Column(db.String(50), nullable=True)  # Gender
 
     def set_password(self, password):
         self.password = generate_password_hash(password)  # Store hashed password in 'password' column

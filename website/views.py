@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, curren
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash  # Ensure this import stays
 from database import db  # Ensure this is the same db instance used everywhere
-from .models import User  # Import User from models
+from website.models import User  # Use absolute import
 
 views = Blueprint('views', __name__)
 

@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from models import User
+from website.models import User
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -41,7 +41,7 @@ class Login(BaseModel):
 
 @app.post ("/users/")
 def signup(user: UserCreate, db: Session = Depends(get_db)):
-    from models import User
+    from website.models import User
     user = User(email=user.email, first_name=user.first_name, password=pwd_context.hash(user.password))
     db.add(user)
     db.commit()
