@@ -12,3 +12,14 @@ https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/
 | Anna             | Recipes are shown based on selected criteria  | 12.02 |
 | Anna and Ksenija | Finished the tasks given by the other team    | 04.03 |
 | Anna             | Fixed bug issue with recipes                  | 08.04 |
+| Anna and Ksenija | Finished the testing report for physics simulator | 17.04 |
+| Ksenija | Created the database for users credentials | 12.03 |
+| Ksenija | Website checks if all of the fields are filled | 15.03 |
+| Ksenija | Fixed the sign up and log in page | 17.03 |
+| Ksenija | Added and reset password mechanism | 21.03 |
+
+
+
+
+
+
