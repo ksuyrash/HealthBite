@@ -17,6 +17,7 @@ https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/
 | Ksenija | Website checks if all of the fields are filled | 15.03 |
 | Ksenija | Fixed the sign up and log in page | 17.03 |
 | Ksenija | Added and reset password mechanism | 21.03 |
+| Anna | Fixed bug issues with checkboxes | 28.04 |
 
 
 
