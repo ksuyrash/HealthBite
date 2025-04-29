@@ -1,6 +1,4 @@
 const body = document.body;
-body.style.fontFamily = 'Times New Roman, sans-serif';
-body.style.backgroundColor = '#f4f4f4';
 body.style.margin = '0';
 body.style.padding = '20px';
 body.style.display = 'flex';
@@ -113,7 +111,6 @@ function displayMatchedRecipes() {
         matchedRecipes.forEach(recipe => {
             resultWindow.document.write(`<p>${recipe.title}</p>`);
             resultWindow.document.write(`<p><a href="${recipe.link}" target="_blank">${recipe.link}</a></p>`);
-            resultWindow.document.write(`<p>${recipe.ingredients}</p>`);
         });
     } else {
         resultWindow.document.write('<h2>No recipes match your preferences.</h2>');
@@ -157,3 +154,4 @@ const resultParagraph = document.createElement('p');
 resultParagraph.id = 'result';
 resultParagraph.style.marginTop = '20px';
 body.appendChild(resultParagraph);
+
