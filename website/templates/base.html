@@ -47,6 +47,7 @@
         </div>
       </div>
     </div>
+
     <nav class="navbar navbar-dark bg-dark">
       <div class="container-fluid">
         <button
@@ -64,24 +65,24 @@
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
-    <div class="alert alert-danger alert dismissable fade show" role="alert">
+    messages %} {% for category, message in messages %}
+    <div
+      class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show"
+      role="alert"
+    >
       {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
     </div>
-    {% else %}
-    <div class="alert alert-success alert dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    {% endfor %} {% endif %} {% endwith %}
 
-    <div class="container">{% block content %} {% endblock %}</div>
+    <div class="container mt-4">{% block content %}{% endblock %}</div>
+
+    <!-- Optional JS dependencies -->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -97,14 +98,7 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-    <!-- prettier-ignore -->
-    <script>
-      type="text/javascript";
-      src="{{ url_for('static', filename='index.js') }}";
-      {
-        {
-        }
-      }
-    </script>
+
+    {% block scripts %}{% endblock %}
   </body>
 </html>
