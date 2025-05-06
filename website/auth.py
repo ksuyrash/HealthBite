@@ -61,12 +61,13 @@ def sign_up():
         new_user = User(
             email=email,
             first_name=first_name,
-            password=generate_password_hash(password1, method='pbkdf2:sha256'),
             height=height,
             weight=weight,
             age=age,
             gender=gender
         )
+        new_user.set_password(password1)
+
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -85,22 +86,11 @@ def reset_password():
         email = request.form.get('email')
         user = User.query.filter_by(email=email).first()
         if user:
-            # Generate token
             token = URLSafeTimedSerializer(app.config['SECRET_KEY']).dumps(email, salt='password-reset')
             reset_url = url_for('auth.reset_password_token', token=token, _external=True)
 
-            # Compose email
             msg = Message('Password Reset Request', recipients=[email])
             msg.body = f'Hello,\n\nClick the link below to reset your password:\n{reset_url}\n\nIf you did not request this, you can safely ignore this email.\n\n- HealthBite Team'
-
-            # Debug SMTP config
-            print("📬 Attempting to send email with config:")
-            print("MAIL_SERVER:", app.config.get("MAIL_SERVER"))
-            print("MAIL_PORT:", app.config.get("MAIL_PORT"))
-            print("MAIL_USERNAME:", app.config.get("MAIL_USERNAME"))
-            print("MAIL_PASSWORD:", (app.config.get("MAIL_PASSWORD") or "")[:3] + "*****")
-            print("MAIL_USE_TLS:", app.config.get("MAIL_USE_TLS"))
-            print("MAIL_USE_SSL:", app.config.get("MAIL_USE_SSL"))
 
             try:
                 mail.send(msg)
@@ -128,10 +118,14 @@ def reset_password_token(token):
             return render_template('reset_password_token.html', token=token)
 
         user = User.query.filter_by(email=email).first()
-        user.password = generate_password_hash(password1, method='pbkdf2:sha256')
-        db.session.commit()
-        flash('Password updated successfully!', category='success')
-        return redirect(url_for('auth.login'))
+        if user:
+            user.set_password(password1)
+            db.session.commit()
+            flash('Password updated successfully!', category='success')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('User not found.', category='error')
+            return redirect(url_for('auth.reset_password'))
 
     return render_template('reset_password_token.html', token=token)
 
