@@ -76,7 +76,8 @@ def sign_up():
             return redirect(url_for('views.home'))
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {str(e)}", category='error')
+            flash(f"An error occurred: {str(e)}", category='error')     # test change
+
 
     return render_template('sign_up.html', user=current_user)
 
