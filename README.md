@@ -18,6 +18,7 @@ https://docs.google.com/document/d/1a19Z5KRJgod9c6kIPqyrBnXw8NGt55sMsU0tI-3P6VE/
 | Ksenija | Fixed the sign up and log in page | 17.03 |
 | Ksenija | Added and reset password mechanism | 21.03 |
 | Anna | Fixed bug issues with checkboxes | 28.04 |
+| Ksenija | Added BMI and calorie calculator  | 03.05 |
 
 
 
