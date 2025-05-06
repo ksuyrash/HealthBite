@@ -96,7 +96,7 @@ def reset_password():
                 mail.send(msg)
                 flash(f'Password reset link sent to {email}.', category='info')
             except Exception as e:
-                flash(f'Error sending email: {str(e)}", category='error')
+                flash(f"Error sending email: {str(e)}", category='error')
         else:
             flash('Email not registered.', category='error')
     return render_template('reset_password.html', user=current_user)
