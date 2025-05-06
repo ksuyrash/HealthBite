@@ -5,7 +5,7 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from website import mail  # <-- This pulls in the mail instance from __init__.py
+from website import mail
 
 auth = Blueprint('auth', __name__)
 
@@ -96,7 +96,7 @@ def reset_password():
                 mail.send(msg)
                 flash(f'Password reset link sent to {email}.', category='info')
             except Exception as e:
-                flash(f'Error sending email: {str(e)}', category='error')
+                flash(f'Error sending email: {str(e)}", category='error')
         else:
             flash('Email not registered.', category='error')
     return render_template('reset_password.html', user=current_user)
@@ -119,8 +119,19 @@ def reset_password_token(token):
 
         user = User.query.filter_by(email=email).first()
         if user:
+            app.logger.info(f"[RESET] Resetting password for user: {email}")
+            app.logger.info(f"[RESET] Old password hash: {user.password}")
             user.set_password(password1)
-            db.session.commit()
+            app.logger.info(f"[RESET] New password hash: {user.password}")
+            try:
+                db.session.commit()
+                app.logger.info("[RESET] Password committed to DB successfully.")
+            except Exception as e:
+                db.session.rollback()
+                app.logger.error(f"[RESET] Error during commit: {str(e)}")
+                flash("Database error occurred during password reset.", category='error')
+                return redirect(url_for('auth.reset_password'))
+
             return redirect(url_for('auth.password_reset_success'))
         else:
             flash('User not found.', category='error')
@@ -131,6 +142,7 @@ def reset_password_token(token):
 @auth.route('/password-reset-success')
 def password_reset_success():
     return render_template('password_reset_success.html')
+
 
 
 
