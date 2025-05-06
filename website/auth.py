@@ -121,13 +121,17 @@ def reset_password_token(token):
         if user:
             user.set_password(password1)
             db.session.commit()
-            flash('Password updated successfully!', category='success')
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.password_reset_success'))
         else:
             flash('User not found.', category='error')
             return redirect(url_for('auth.reset_password'))
 
     return render_template('reset_password_token.html', token=token)
+
+@auth.route('/password-reset-success')
+def password_reset_success():
+    return render_template('password_reset_success.html')
+
 
 
 
