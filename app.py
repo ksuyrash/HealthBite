@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 import os
 from dotenv import load_dotenv
-from database import create_database, db
+from website import create_app, db
 from website.auth import mail
 
 migrate = Migrate()
@@ -14,12 +14,12 @@ def create_app():
     load_dotenv()
     app = Flask(__name__, template_folder="website/templates")
 
-    # Основные настройки
+    # Main settings
     app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Конфигурация для Flask-Mail
+    # Flask-Mail configuration
     app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER")
     app.config['MAIL_PORT'] = int(os.getenv("MAIL_PORT"))
     app.config['MAIL_USE_TLS'] = os.getenv("MAIL_USE_TLS") == "True"
@@ -52,11 +52,9 @@ def create_app():
         with current_app.app_context():
             return User.query.get(int(user_id))
 
-    with app.app_context():
-        create_database(app)
-
     return app
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+

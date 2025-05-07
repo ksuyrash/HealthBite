@@ -1,4 +1,3 @@
-# filepath: c:\Users\Xu\Documents\HealthBite\HealthBite\website\config.py
 import os
 from dotenv import load_dotenv
 
@@ -12,7 +11,6 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable is not set.")
 
-# Email configuration for Flask-Mail
 MAIL_SERVER = os.getenv("MAIL_SERVER")
 if not MAIL_SERVER:
     raise ValueError("MAIL_SERVER environment variable is not set.")
@@ -28,4 +26,4 @@ MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 if not MAIL_PASSWORD:
     raise ValueError("MAIL_PASSWORD environment variable is not set.")
 
-MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", MAIL_USERNAME)  # Use username as default sender
+MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER", MAIL_USERNAME)

@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app as app
 from website.models import User
 from werkzeug.security import generate_password_hash
-from . import db
-from flask_login import login_user, login_required, logout_user, current_user
+from website import mail, db  # ✅ Correctly importing mail and db
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-from website import mail
+from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
@@ -15,7 +14,8 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        # Replace User.query with db.session.query
+        user = db.session.query(User).filter_by(email=email).first()
         if not user:
             flash('User not found. Please check your email.', category='error')
             return render_template('login.html', user=current_user)
@@ -76,8 +76,7 @@ def sign_up():
             return redirect(url_for('views.home'))
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {str(e)}", category='error')     # test change
-
+            flash(f"An error occurred: {str(e)}", category='error')
 
     return render_template('sign_up.html', user=current_user)
 
@@ -85,7 +84,7 @@ def sign_up():
 def reset_password():
     if request.method == 'POST':
         email = request.form.get('email')
-        user = User.query.filter_by(email=email).first()
+        user = db.session.query(User).filter_by(email=email).first()
         if user:
             token = URLSafeTimedSerializer(app.config['SECRET_KEY']).dumps(email, salt='password-reset')
             reset_url = url_for('auth.reset_password_token', token=token, _external=True)
@@ -110,6 +109,8 @@ def reset_password_token(token):
         flash('The reset link has expired.', category='error')
         return redirect(url_for('auth.reset_password'))
 
+    user = db.session.query(User).filter_by(email=email).first()
+
     if request.method == 'POST':
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
@@ -118,22 +119,21 @@ def reset_password_token(token):
             flash('Passwords do not match.', category='error')
             return render_template('reset_password_token.html', token=token)
 
-        user = User.query.filter_by(email=email).first()
         if user:
-            app.logger.info(f"[RESET] Resetting password for user: {email}")
-            app.logger.info(f"[RESET] Old password hash: {user.password}")
             user.set_password(password1)
-            app.logger.info(f"[RESET] New password hash: {user.password}")
+
             try:
+                db.session.add(user)
                 db.session.commit()
-                app.logger.info("[RESET] Password committed to DB successfully.")
+
+                flash("Password successfully updated.", category='success')
+                return redirect(url_for('auth.password_reset_success'))
+
             except Exception as e:
                 db.session.rollback()
-                app.logger.error(f"[RESET] Error during commit: {str(e)}")
                 flash("Database error occurred during password reset.", category='error')
+                app.logger.error(f"Password reset failed: {str(e)}")
                 return redirect(url_for('auth.reset_password'))
-
-            return redirect(url_for('auth.password_reset_success'))
         else:
             flash('User not found.', category='error')
             return redirect(url_for('auth.reset_password'))
@@ -143,6 +143,11 @@ def reset_password_token(token):
 @auth.route('/password-reset-success')
 def password_reset_success():
     return render_template('password_reset_success.html')
+
+
+
+
+
 
 
 
