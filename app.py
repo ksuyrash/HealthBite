@@ -34,7 +34,19 @@ def create_app():
     migrate.init_app(app, db)
 
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'auth.login'  # Redirect to login for protected routes
+    login_manager.login_message = 'Please log in to access this page.'
+    login_manager.login_message_category = 'error'
+
+    # Custom login check to exempt /sign-up
+    @login_manager.request_loader
+    def load_user_from_request(request):
+        if request.path == '/sign-up':
+            return None  # Allow access to sign-up without login
+        user_id = request.cookies.get('user_id')
+        if user_id:
+            return User.query.get(int(user_id))
+        return None
 
     mail.init_app(app)
 
@@ -57,4 +69,3 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=5000, debug=True)
-

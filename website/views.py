@@ -6,27 +6,15 @@ from . import db
 views = Blueprint('views', __name__)
 
 @views.route('/')
+@login_required
 def home():
     return render_template('home.html', user=current_user)
-
-@views.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        user = User.query.filter_by(email=email).first()
-        if user and user.check_password(password):
-            login_user(user)
-            return redirect(url_for('views.home'))
-        else:
-            flash('Invalid credentials.', 'error')
-    return render_template('login.html', user=current_user)
 
 @views.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('views.login'))
+    return redirect(url_for('auth.login'))
 
 @views.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -40,38 +28,45 @@ def sign_up():
         age = request.form.get('age')
         gender = request.form.get('gender')
 
+        # Check for missing fields
         if not all([email, first_name, password1, password2, height, weight, age, gender]):
-            flash('All fields are required.', 'error')
+            flash('Please fill in all fields.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Validate email format
         if '@' not in email or '.' not in email:
-            flash('Invalid email address.', 'error')
+            flash('Invalid email format. Please use an email like example@domain.com.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Validate password match
         if password1 != password2:
-            flash('Passwords do not match.', 'error')
+            flash('Passwords do not match. Please try again.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Validate password length
         if len(password1) < 8:
             flash('Password must be at least 8 characters long.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Validate numeric fields
         try:
             height = float(height)
             weight = float(weight)
             age = int(age)
             if height <= 0 or weight <= 0 or age <= 0:
-                flash('Height, weight, and age must be positive.', 'error')
+                flash('Height, weight, and age must be positive numbers.', 'error')
                 return redirect(url_for('views.sign_up'))
         except ValueError:
             flash('Height, weight, and age must be valid numbers.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Check for existing user
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            flash('Email already registered.', 'error')
+            flash('This email is already registered. Please use a different email or log in.', 'error')
             return redirect(url_for('views.sign_up'))
 
+        # Create new user
         new_user = User(
             email=email,
             first_name=first_name,
@@ -84,8 +79,7 @@ def sign_up():
 
         db.session.add(new_user)
         db.session.commit()
-        login_user(new_user)
-        flash('Account created successfully!', 'success')
-        return redirect(url_for('views.home'))
+        login_user(new_user, remember=True)  # Log in the user after sign-up
+        return redirect(url_for('views.home'))  # Redirect to homepage
 
     return render_template('sign_up.html', user=current_user)
