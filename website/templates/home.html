@@ -1,6 +1,5 @@
-{% extends "base.html" %} 
-{% block title %}Home{% endblock %} 
-{% block content %}
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
 <div class="container mt-4">
   <h1 class="mb-4">{{ user.first_name }}, welcome to HealthBite</h1>
 
@@ -119,31 +118,42 @@
     <div class="card-header">Select Your Preferences</div>
     <div class="card-body">
       <div id="preferences-container"></div>
-      <button id="submit-preferences" class="btn btn-primary mt-3">Submit</button>
+      <button id="submit-preferences" class="btn btn-primary mt-3">
+        Submit
+      </button>
       <p id="preferences-result" class="mt-3"></p>
     </div>
   </div>
 </div>
-{% endblock %} 
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='main.js') }}"></script>
 <script>
   // Dynamically generate checkboxes for preferences
-  const preferencesContainer = document.getElementById('preferences-container');
+  const preferencesContainer = document.getElementById("preferences-container");
   const options = [
-    'high-protein', 'breakfast', 'lunch', 'dinner', 'snack', 'dessert',
-    'vegan', 'sugar-free', 'gluten-free', 'soup', 'salad', 'vegetarian'
+    "high-protein",
+    "breakfast",
+    "lunch",
+    "dinner",
+    "snack",
+    "dessert",
+    "vegan",
+    "sugar-free",
+    "gluten-free",
+    "soup",
+    "salad",
+    "vegetarian",
   ];
 
-  options.forEach(option => {
-    const label = document.createElement('label');
-    label.style.display = 'block';
-    label.style.marginBottom = '5px';
+  options.forEach((option) => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+    label.style.marginBottom = "5px";
 
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
     checkbox.value = option;
-    checkbox.style.marginRight = '10px';
+    checkbox.style.marginRight = "10px";
 
     label.appendChild(checkbox);
     label.appendChild(document.createTextNode(option));
@@ -152,82 +162,280 @@
 
   // Recipe data
   const recipes = [
-  {"title": "Vegan Chili", "link": "https://www.bbcgoodfood.com/recipes/vegan-chilli", "tags": ["vegan", "dinner", "soup"]},
-    {"title": "Sugar-Free Banana Bread", "link": "https://www.bbcgoodfood.com/recipes/sugar-free-banana-cake", "tags": ["sugar-free", "dessert"]},
-    {"title": "High Protein Greek Yogurt Parfait", "link": "https://www.ibreatheimhungry.com/high-protein-yogurt-parfait/", "tags": ["high-protein", "breakfast"]},
-    {"title": "Chickpea Salad Sandwich", "link": "https://www.loveandlemons.com/chickpea-salad-sandwich/", "tags": ["vegan", "lunch", "salad"]},
-    {"title": "Zucchini Noodles with Avocado Pesto", "link": "https://www.eatyourselfskinny.com/zucchini-noodles-with-creamy-avocado-pesto/", "tags": ["vegan", "lunch", "vegetarian"]},
-    {"title": "Vegan Lentil Soup", "link": "https://www.noracooks.com/vegan-lentil-soup/", "tags": ["vegan", "dinner", "soup"]},
-    {"title": "Sugar-Free Pancakes", "link": "https://homecooknblog.com/sugar-free-pancakes/", "tags": ["sugar-free", "breakfast"]},
-    {"title": "Quinoa & Black Bean Salad", "link": "https://detoxinista.com/the-best-quinoa-black-bean-salad/", "tags": ["vegan", "lunch", "salad"]},
-    {"title": "Almond Flour Muffins", "link": "https://thebigmansworld.com/almond-flour-muffins/", "tags": ["gluten-free", "snack"]},
-    {"title": "Vegan Buddha Bowl", "link": "https://www.loveandlemons.com/buddha-bowl-recipe/", "tags": ["vegan", "dinner"]},
-    {"title": "Sugar-Free Granola", "link": "https://www.lazycatkitchen.com/healthy-granola-no-sugar-oil/", "tags": ["sugar-free", "snack"]},
-    {"title": "Protein-Packed Smoothie", "link": "https://www.eatingwell.com/gallery/7910825/high-protein-smoothie-recipes/", "tags": ["high-protein", "breakfast"]},
-    {"title": "Vegan Stuffed Peppers", "link": "https://www.wellplated.com/vegan-stuffed-peppers/", "tags": ["vegan", "dinner"]},
-    {"title": "Chickpea Flour Omelette", "link": "https://thehiddenveggies.com/chickpea-omelette-the-best-vegan-omelette/", "tags": ["vegan", "breakfast"]},
-    {"title": "High Protein Egg Muffins", "link": "https://www.wellplated.com/healthy-breakfast-egg-muffins/", "tags": ["high-protein", "breakfast"]},
-    {"title": "Vegan Tacos", "link": "https://www.loveandlemons.com/vegan-tacos/", "tags": ["vegan", "dinner"]},
-    {"title": "Avocado Toast with Chickpeas", "link": "https://nadiashealthykitchen.com/spicy-chickpea-avocado-toast/", "tags": ["vegan", "lunch"]},
-    {"title": "Sugar-Free Sweet Potato Casserole", "link": "https://www.eatingwell.com/recipe/268408/no-sugar-added-sweet-potato-casserole/", "tags": ["sugar-free", "dinner"]},
-    {"title": "High Protein Quinoa Bowl", "link": "https://healthylittlevittles.com/protein-packed-creamy-tahini-quinoa-bowls/", "tags": ["high-protein", "dinner"]},
-    {"title": "Vegetable Stir-Fry", "link": "https://www.loveandlemons.com/stir-fry-recipe/", "tags": ["vegan", "dinner"]},
-    {"title": "Vegan Pizza", "link": "https://minimalistbaker.com/my-favorite-vegan-pizza/", "tags": ["vegan", "dinner"]},
-    {"title": "Sugar-Free Chocolate Avocado Mousse", "link": "https://sugarfreelondoner.com/chocolate-avocado-mousse/", "tags": ["sugar-free", "dessert"]},
-    {"title": "Overnight Oats with Chia Seeds", "link": "https://www.loveandlemons.com/overnight-oats-recipe/", "tags": ["vegan", "breakfast"]},
-    {"title": "Vegan Smoothie Bowl", "link": "https://minimalistbaker.com/favorite-smoothie-bowl-5-minutes/", "tags": ["vegan", "snack"]},
-    {"title": "Sugar-Free Carrot Cake", "link": "https://sugarfreelondoner.com/sugar-free-carrot-cake/", "tags": ["sugar-free", "dessert"]},
-    {"title": "High Protein Turkey Meatballs", "link": "https://www.erinliveswhole.com/healthy-greek-turkey-meatballs-with-tzatziki/", "tags": ["high-protein", "dinner"]},
-    {"title": "Vegan Mushroom Stroganoff", "link": "https://rainbowplantlife.com/creamy-vegan-mushroom-stroganoff/", "tags": ["vegan", "dinner"]},
-    {"title": "Sugar-Free Peanut Butter Cookies", "link": "https://www.allrecipes.com/recipe/158403/sugar-free-peanut-butter-cookies/", "tags": ["sugar-free", "dessert"]},
-    {"title": "Tofu Scramble", "link": "https://www.noracooks.com/tofu-scramble/", "tags": ["vegan", "breakfast"]},
-  {"title": "Chia Seed Pudding", "link": "https://www.loveandlemons.com/chia-seed-pudding/", "tags": ["vegan", "dessert", "breakfast"]},
-  {"title": "Turkey & Veggie Lettuce Wraps", "link": "https://www.melskitchencafe.com/veggie-turkey-taco-lettuce-wraps/", "tags": ["high-protein", "lunch"]},
-  {"title": "Cauliflower Rice Stir-Fry", "link": "https://www.allrecipes.com/recipe/276608/cauliflower-rice-stir-fry/", "tags": ["vegetarian", "dinner", "gluten-free"]},
-  {"title": "Sweet Potato and Black Bean Tacos", "link": "https://cookieandkate.com/sweet-potato-black-bean-tacos/", "tags": ["vegan", "dinner", "salad"]},
-  {"title": "Kale and Quinoa Salad", "link": "https://www.recipetineats.com/kale-and-quinoa-salad/", "tags": ["vegan", "salad", "healthy"]},
-  {"title": "Roasted Chickpeas Snack", "link": "https://www.loveandlemons.com/roasted-chickpeas/", "tags": ["vegan", "snack"]},
-  {"title": "Lentil and Spinach Soup", "link": "https://toriavey.com/lentil-spinach-soup-with-lemon/", "tags": ["vegan", "soup"]},
-  {"title": "Almond Butter Energy Balls", "link": "https://www.purelykaylie.com/almond-butter-energy-balls/", "tags": ["vegan", "snack"]},
-  {"title": "Baked Salmon with Veggies", "link": "https://hungryfoodie.com/sheet-pan-salmon-and-vegetables/", "tags": ["dinner", "high-protein"]},
-  {"title": "Veggie Spring Rolls", "link": "https://www.indianhealthyrecipes.com/baked-vegetable-spring-rolls-recipe-crusty-oven-baked-vegetable-spring-rolls/", "tags": ["vegan", "lunch"]},
-  {"title": "Banana Oat Breakfast Bars", "link": "https://www.theconsciousplantkitchen.com/banana-oat-bars/", "tags": ["vegan", "breakfast"]},
-  {"title": "Cucumber & Tomato Salad", "link": "https://www.spendwithpennies.com/cucumber-tomato-salad/", "tags": ["vegetarian", "salad"]},
-  {"title": "Stuffed Bell Peppers", "link": "https://www.budgetbytes.com/stuffed-bell-peppers/", "tags": ["high-protein", "dinner"]},
-  {"title": "Spicy Lentil Dal", "link": "https://simple-veganista.com/spicy-da/", "tags": ["vegan", "dinner", "soup"]},
-  {"title": "Vegan Brownies", "link": "https://www.noracooks.com/vegan-brownies-recipe/", "tags": ["vegan", "dessert"]},
-  {"title": "Pesto Zucchini Noodles", "link": "https://www.twopeasandtheirpod.com/zucchini-noodles-with-pesto/", "tags": ["vegetarian", "dinner", "gluten-free"]},
-  {"title": "Smoothie with Spinach & Mango", "link": "https://www.wellplated.com/mango-green-smoothie-recipe/", "tags": ["vegan", "breakfast"]},
-  {"title": "Vegetable Tempura", "link": "https://www.justonecookbook.com/vegetable-tempura/", "tags": ["vegetarian", "snack"]},
-  {"title": "Roasted Beet Salad", "link": "https://www.loveandlemons.com/beet-salad-recipe/", "tags": ["vegetarian"]},
+    {
+      title: "Vegan Chili",
+      link: "https://www.bbcgoodfood.com/recipes/vegan-chilli",
+      tags: ["vegan", "dinner", "soup"],
+    },
+    {
+      title: "Sugar-Free Banana Bread",
+      link: "https://www.bbcgoodfood.com/recipes/sugar-free-banana-cake",
+      tags: ["sugar-free", "dessert"],
+    },
+    {
+      title: "High Protein Greek Yogurt Parfait",
+      link: "https://www.ibreatheimhungry.com/high-protein-yogurt-parfait/",
+      tags: ["high-protein", "breakfast"],
+    },
+    {
+      title: "Chickpea Salad Sandwich",
+      link: "https://www.loveandlemons.com/chickpea-salad-sandwich/",
+      tags: ["vegan", "lunch", "salad"],
+    },
+    {
+      title: "Zucchini Noodles with Avocado Pesto",
+      link: "https://www.eatyourselfskinny.com/zucchini-noodles-with-creamy-avocado-pesto/",
+      tags: ["vegan", "lunch", "vegetarian"],
+    },
+    {
+      title: "Vegan Lentil Soup",
+      link: "https://www.noracooks.com/vegan-lentil-soup/",
+      tags: ["vegan", "dinner", "soup"],
+    },
+    {
+      title: "Sugar-Free Pancakes",
+      link: "https://homecooknblog.com/sugar-free-pancakes/",
+      tags: ["sugar-free", "breakfast"],
+    },
+    {
+      title: "Quinoa & Black Bean Salad",
+      link: "https://detoxinista.com/the-best-quinoa-black-bean-salad/",
+      tags: ["vegan", "lunch", "salad"],
+    },
+    {
+      title: "Almond Flour Muffins",
+      link: "https://thebigmansworld.com/almond-flour-muffins/",
+      tags: ["gluten-free", "snack"],
+    },
+    {
+      title: "Vegan Buddha Bowl",
+      link: "https://www.loveandlemons.com/buddha-bowl-recipe/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Sugar-Free Granola",
+      link: "https://www.lazycatkitchen.com/healthy-granola-no-sugar-oil/",
+      tags: ["sugar-free", "snack"],
+    },
+    {
+      title: "Protein-Packed Smoothie",
+      link: "https://www.eatingwell.com/gallery/7910825/high-protein-smoothie-recipes/",
+      tags: ["high-protein", "breakfast"],
+    },
+    {
+      title: "Vegan Stuffed Peppers",
+      link: "https://www.wellplated.com/vegan-stuffed-peppers/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Chickpea Flour Omelette",
+      link: "https://thehiddenveggies.com/chickpea-omelette-the-best-vegan-omelette/",
+      tags: ["vegan", "breakfast"],
+    },
+    {
+      title: "High Protein Egg Muffins",
+      link: "https://www.wellplated.com/healthy-breakfast-egg-muffins/",
+      tags: ["high-protein", "breakfast"],
+    },
+    {
+      title: "Vegan Tacos",
+      link: "https://www.loveandlemons.com/vegan-tacos/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Avocado Toast with Chickpeas",
+      link: "https://nadiashealthykitchen.com/spicy-chickpea-avocado-toast/",
+      tags: ["vegan", "lunch"],
+    },
+    {
+      title: "Sugar-Free Sweet Potato Casserole",
+      link: "https://www.eatingwell.com/recipe/268408/no-sugar-added-sweet-potato-casserole/",
+      tags: ["sugar-free", "dinner"],
+    },
+    {
+      title: "High Protein Quinoa Bowl",
+      link: "https://healthylittlevittles.com/protein-packed-creamy-tahini-quinoa-bowls/",
+      tags: ["high-protein", "dinner"],
+    },
+    {
+      title: "Vegetable Stir-Fry",
+      link: "https://www.loveandlemons.com/stir-fry-recipe/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Vegan Pizza",
+      link: "https://minimalistbaker.com/my-favorite-vegan-pizza/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Sugar-Free Chocolate Avocado Mousse",
+      link: "https://sugarfreelondoner.com/chocolate-avocado-mousse/",
+      tags: ["sugar-free", "dessert"],
+    },
+    {
+      title: "Overnight Oats with Chia Seeds",
+      link: "https://www.loveandlemons.com/overnight-oats-recipe/",
+      tags: ["vegan", "breakfast"],
+    },
+    {
+      title: "Vegan Smoothie Bowl",
+      link: "https://minimalistbaker.com/favorite-smoothie-bowl-5-minutes/",
+      tags: ["vegan", "snack"],
+    },
+    {
+      title: "Sugar-Free Carrot Cake",
+      link: "https://sugarfreelondoner.com/sugar-free-carrot-cake/",
+      tags: ["sugar-free", "dessert"],
+    },
+    {
+      title: "High Protein Turkey Meatballs",
+      link: "https://www.erinliveswhole.com/healthy-greek-turkey-meatballs-with-tzatziki/",
+      tags: ["high-protein", "dinner"],
+    },
+    {
+      title: "Vegan Mushroom Stroganoff",
+      link: "https://rainbowplantlife.com/creamy-vegan-mushroom-stroganoff/",
+      tags: ["vegan", "dinner"],
+    },
+    {
+      title: "Sugar-Free Peanut Butter Cookies",
+      link: "https://www.allrecipes.com/recipe/158403/sugar-free-peanut-butter-cookies/",
+      tags: ["sugar-free", "dessert"],
+    },
+    {
+      title: "Tofu Scramble",
+      link: "https://www.noracooks.com/tofu-scramble/",
+      tags: ["vegan", "breakfast"],
+    },
+    {
+      title: "Chia Seed Pudding",
+      link: "https://www.loveandlemons.com/chia-seed-pudding/",
+      tags: ["vegan", "dessert", "breakfast"],
+    },
+    {
+      title: "Turkey & Veggie Lettuce Wraps",
+      link: "https://www.melskitchencafe.com/veggie-turkey-taco-lettuce-wraps/",
+      tags: ["high-protein", "lunch"],
+    },
+    {
+      title: "Cauliflower Rice Stir-Fry",
+      link: "https://www.allrecipes.com/recipe/276608/cauliflower-rice-stir-fry/",
+      tags: ["vegetarian", "dinner", "gluten-free"],
+    },
+    {
+      title: "Sweet Potato and Black Bean Tacos",
+      link: "https://cookieandkate.com/sweet-potato-black-bean-tacos/",
+      tags: ["vegan", "dinner", "salad"],
+    },
+    {
+      title: "Kale and Quinoa Salad",
+      link: "https://www.recipetineats.com/kale-and-quinoa-salad/",
+      tags: ["vegan", "salad", "healthy"],
+    },
+    {
+      title: "Roasted Chickpeas Snack",
+      link: "https://www.loveandlemons.com/roasted-chickpeas/",
+      tags: ["vegan", "snack"],
+    },
+    {
+      title: "Lentil and Spinach Soup",
+      link: "https://toriavey.com/lentil-spinach-soup-with-lemon/",
+      tags: ["vegan", "soup"],
+    },
+    {
+      title: "Almond Butter Energy Balls",
+      link: "https://www.purelykaylie.com/almond-butter-energy-balls/",
+      tags: ["vegan", "snack"],
+    },
+    {
+      title: "Baked Salmon with Veggies",
+      link: "https://hungryfoodie.com/sheet-pan-salmon-and-vegetables/",
+      tags: ["dinner", "high-protein"],
+    },
+    {
+      title: "Veggie Spring Rolls",
+      link: "https://www.indianhealthyrecipes.com/baked-vegetable-spring-rolls-recipe-crusty-oven-baked-vegetable-spring-rolls/",
+      tags: ["vegan", "lunch"],
+    },
+    {
+      title: "Banana Oat Breakfast Bars",
+      link: "https://www.theconsciousplantkitchen.com/banana-oat-bars/",
+      tags: ["vegan", "breakfast"],
+    },
+    {
+      title: "Cucumber & Tomato Salad",
+      link: "https://www.spendwithpennies.com/cucumber-tomato-salad/",
+      tags: ["vegetarian", "salad"],
+    },
+    {
+      title: "Stuffed Bell Peppers",
+      link: "https://www.budgetbytes.com/stuffed-bell-peppers/",
+      tags: ["high-protein", "dinner"],
+    },
+    {
+      title: "Spicy Lentil Dal",
+      link: "https://simple-veganista.com/spicy-da/",
+      tags: ["vegan", "dinner", "soup"],
+    },
+    {
+      title: "Vegan Brownies",
+      link: "https://www.noracooks.com/vegan-brownies-recipe/",
+      tags: ["vegan", "dessert"],
+    },
+    {
+      title: "Pesto Zucchini Noodles",
+      link: "https://www.twopeasandtheirpod.com/zucchini-noodles-with-pesto/",
+      tags: ["vegetarian", "dinner", "gluten-free"],
+    },
+    {
+      title: "Smoothie with Spinach & Mango",
+      link: "https://www.wellplated.com/mango-green-smoothie-recipe/",
+      tags: ["vegan", "breakfast"],
+    },
+    {
+      title: "Vegetable Tempura",
+      link: "https://www.justonecookbook.com/vegetable-tempura/",
+      tags: ["vegetarian", "snack"],
+    },
+    {
+      title: "Roasted Beet Salad",
+      link: "https://www.loveandlemons.com/beet-salad-recipe/",
+      tags: ["vegetarian"],
+    },
   ];
 
   // Handle preferences submission
-  document.getElementById('submit-preferences').addEventListener('click', () => {
-    const checkboxes = preferencesContainer.querySelectorAll('input[type="checkbox"]');
-    const selected = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+  document
+    .getElementById("submit-preferences")
+    .addEventListener("click", () => {
+      const checkboxes = preferencesContainer.querySelectorAll(
+        'input[type="checkbox"]'
+      );
+      const selected = Array.from(checkboxes)
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.value);
 
-    const result = document.getElementById('preferences-result');
-    if (selected.length === 0) {
-      result.textContent = 'Please select at least one preference.';
-      result.style.color = 'red';
-      return;
-    }
+      const result = document.getElementById("preferences-result");
+      if (selected.length === 0) {
+        result.textContent = "Please select at least one preference.";
+        result.style.color = "red";
+        return;
+      }
 
-    const matchedRecipes = recipes.filter(recipe => {
-      return selected.every(preference => recipe.tags.includes(preference));
-    });
-
-    if (matchedRecipes.length > 0) {
-      result.innerHTML = '<h4>Recommended Recipes:</h4>';
-      matchedRecipes.forEach(recipe => {
-        result.innerHTML += `<p><a href="${recipe.link}" target="_blank">${recipe.title}</a></p>`;
+      const matchedRecipes = recipes.filter((recipe) => {
+        return selected.every((preference) => recipe.tags.includes(preference));
       });
-      result.style.color = 'green';
-    } else {
-      result.textContent = 'No recipes match your preferences.';
-      result.style.color = 'red';
-    }
-  });
+
+      if (matchedRecipes.length > 0) {
+        result.innerHTML = "<h4>Recommended Recipes:</h4>";
+        matchedRecipes.forEach((recipe) => {
+          result.innerHTML += `<p><a href="${recipe.link}" target="_blank">${recipe.title}</a></p>`;
+        });
+        result.style.color = "green";
+      } else {
+        result.textContent = "No recipes match your preferences.";
+        result.style.color = "red";
+      }
+    });
 </script>
 {% endblock %}
