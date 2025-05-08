@@ -1,5 +1,6 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block content %}
 <div class="container mt-4">
   <h1 class="mb-4">{{ user.first_name }}, welcome to HealthBite</h1>
 
@@ -55,7 +56,7 @@
   </div>
 
   <!-- Calorie Needs -->
-  <div class="card">
+  <div class="card mb-4">
     <div class="card-header">Daily Calorie Needs</div>
     <div class="card-body">
       <form id="calorie-form" class="row g-3">
@@ -70,7 +71,6 @@
             <option value="female">Female</option>
           </select>
         </div>
-
         <div class="col-md-6">
           <label for="cal-height" class="form-label">Height (cm)</label>
           <input type="number" id="cal-height" class="form-control" required />
@@ -79,7 +79,6 @@
           <label for="cal-weight" class="form-label">Current Weight (kg)</label>
           <input type="number" id="cal-weight" class="form-control" required />
         </div>
-
         <div class="col-md-6">
           <label for="activity" class="form-label">Activity Level</label>
           <select id="activity" class="form-select">
@@ -90,12 +89,10 @@
             <option value="1.9">Extra active</option>
           </select>
         </div>
-
         <div class="col-md-6">
           <label for="goal-weight" class="form-label">Goal Weight (kg)</label>
           <input type="number" id="goal-weight" class="form-control" />
         </div>
-
         <div class="col-md-6">
           <label for="intensity" class="form-label">Goal Intensity</label>
           <select id="intensity" class="form-select">
@@ -104,7 +101,6 @@
             <option value="750">Aggressive (750 kcal/day)</option>
           </select>
         </div>
-
         <div class="col-12">
           <button type="submit" class="btn btn-success">
             Calculate Calories
@@ -117,7 +113,101 @@
       </form>
     </div>
   </div>
+
+  <!-- Preferences Section -->
+  <div class="card">
+    <div class="card-header">Select Your Preferences</div>
+    <div class="card-body">
+      <div id="preferences-container"></div>
+      <button id="submit-preferences" class="btn btn-primary mt-3">Submit</button>
+      <p id="preferences-result" class="mt-3"></p>
+    </div>
+  </div>
 </div>
-{% endblock %} {% block scripts %}
-<script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %} 
+
+{% block scripts %}
+<script>
+  // Dynamically generate checkboxes for preferences
+  const preferencesContainer = document.getElementById('preferences-container');
+  const options = [
+    'high protein', 'breakfast', 'lunch', 'dinner', 'snack', 'dessert',
+    'vegan', 'sugar-free', 'gluten-free', 'soup', 'salad', 'vegetarian'
+  ];
+
+  options.forEach(option => {
+    const label = document.createElement('label');
+    label.style.display = 'block';
+    label.style.marginBottom = '5px';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = option;
+    checkbox.style.marginRight = '10px';
+
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(option));
+    preferencesContainer.appendChild(label);
+  });
+
+  // Recipe data
+  const recipes = [
+  {"title": "Vegan Chili", "link": "https://www.bbcgoodfood.com/recipes/vegan-chilli", "tags": ["vegan", "dinner", "soup"]},
+    {"title": "Sugar-Free Banana Bread", "link": "https://www.bbcgoodfood.com/recipes/sugar-free-banana-cake", "tags": ["sugar-free", "dessert"]},
+    {"title": "High Protein Greek Yogurt Parfait", "link": "https://www.ibreatheimhungry.com/high-protein-yogurt-parfait/", "tags": ["high-protein", "breakfast"]},
+    {"title": "Chickpea Salad Sandwich", "link": "https://www.loveandlemons.com/chickpea-salad-sandwich/", "tags": ["vegan", "lunch", "salad"]},
+    {"title": "Zucchini Noodles with Avocado Pesto", "link": "https://www.eatyourselfskinny.com/zucchini-noodles-with-creamy-avocado-pesto/", "tags": ["vegan", "lunch", "vegetarian"]},
+    {"title": "Vegan Lentil Soup", "link": "https://www.noracooks.com/vegan-lentil-soup/", "tags": ["vegan", "dinner", "soup"]},
+    {"title": "Sugar-Free Pancakes", "link": "https://homecooknblog.com/sugar-free-pancakes/", "tags": ["sugar-free", "breakfast"]},
+    {"title": "Quinoa & Black Bean Salad", "link": "https://detoxinista.com/the-best-quinoa-black-bean-salad/", "tags": ["vegan", "lunch", "salad"]},
+    {"title": "Almond Flour Muffins", "link": "https://thebigmansworld.com/almond-flour-muffins/", "tags": ["gluten-free", "snack"]},
+    {"title": "Vegan Buddha Bowl", "link": "https://www.loveandlemons.com/buddha-bowl-recipe/", "tags": ["vegan", "dinner"]},
+    {"title": "Sugar-Free Granola", "link": "https://www.lazycatkitchen.com/healthy-granola-no-sugar-oil/", "tags": ["sugar-free", "snack"]},
+    {"title": "Protein-Packed Smoothie", "link": "https://www.eatingwell.com/gallery/7910825/high-protein-smoothie-recipes/", "tags": ["high-protein", "breakfast"]},
+    {"title": "Vegan Stuffed Peppers", "link": "https://www.wellplated.com/vegan-stuffed-peppers/", "tags": ["vegan", "dinner"]},
+    {"title": "Chickpea Flour Omelette", "link": "https://thehiddenveggies.com/chickpea-omelette-the-best-vegan-omelette/", "tags": ["vegan", "breakfast"]},
+    {"title": "High Protein Egg Muffins", "link": "https://www.wellplated.com/healthy-breakfast-egg-muffins/", "tags": ["high-protein", "breakfast"]},
+    {"title": "Vegan Tacos", "link": "https://www.loveandlemons.com/vegan-tacos/", "tags": ["vegan", "dinner"]},
+    {"title": "Avocado Toast with Chickpeas", "link": "https://nadiashealthykitchen.com/spicy-chickpea-avocado-toast/", "tags": ["vegan", "lunch"]},
+    {"title": "Sugar-Free Sweet Potato Casserole", "link": "https://www.eatingwell.com/recipe/268408/no-sugar-added-sweet-potato-casserole/", "tags": ["sugar-free", "dinner"]},
+    {"title": "High Protein Quinoa Bowl", "link": "https://healthylittlevittles.com/protein-packed-creamy-tahini-quinoa-bowls/", "tags": ["high-protein", "dinner"]},
+    {"title": "Vegetable Stir-Fry", "link": "https://www.loveandlemons.com/stir-fry-recipe/", "tags": ["vegan", "dinner"]},
+    {"title": "Vegan Pizza", "link": "https://minimalistbaker.com/my-favorite-vegan-pizza/", "tags": ["vegan", "dinner"]},
+    {"title": "Sugar-Free Chocolate Avocado Mousse", "link": "https://sugarfreelondoner.com/chocolate-avocado-mousse/", "tags": ["sugar-free", "dessert"]},
+    {"title": "Overnight Oats with Chia Seeds", "link": "https://www.loveandlemons.com/overnight-oats-recipe/", "tags": ["vegan", "breakfast"]},
+    {"title": "Vegan Smoothie Bowl", "link": "https://minimalistbaker.com/favorite-smoothie-bowl-5-minutes/", "tags": ["vegan", "snack"]},
+    {"title": "Sugar-Free Carrot Cake", "link": "https://sugarfreelondoner.com/sugar-free-carrot-cake/", "tags": ["sugar-free", "dessert"]},
+    {"title": "High Protein Turkey Meatballs", "link": "https://www.erinliveswhole.com/healthy-greek-turkey-meatballs-with-tzatziki/", "tags": ["high-protein", "dinner"]},
+    {"title": "Vegan Mushroom Stroganoff", "link": "https://rainbowplantlife.com/creamy-vegan-mushroom-stroganoff/", "tags": ["vegan", "dinner"]},
+    {"title": "Sugar-Free Peanut Butter Cookies", "link": "https://www.allrecipes.com/recipe/158403/sugar-free-peanut-butter-cookies/", "tags": ["sugar-free", "dessert"]},
+  ];
+
+  // Handle preferences submission
+  document.getElementById('submit-preferences').addEventListener('click', () => {
+    const checkboxes = preferencesContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+
+    const result = document.getElementById('preferences-result');
+    if (selected.length === 0) {
+      result.textContent = 'Please select at least one preference.';
+      result.style.color = 'red';
+      return;
+    }
+
+    const matchedRecipes = recipes.filter(recipe => {
+      return recipe.tags.some(tag => selected.includes(tag));
+    });
+
+    if (matchedRecipes.length > 0) {
+      result.innerHTML = '<h4>Recommended Recipes:</h4>';
+      matchedRecipes.forEach(recipe => {
+        result.innerHTML += `<p><a href="${recipe.link}" target="_blank">${recipe.title}</a></p>`;
+      });
+      result.style.color = 'green';
+    } else {
+      result.textContent = 'No recipes match your preferences.';
+      result.style.color = 'red';
+    }
+  });
+</script>
 {% endblock %}
