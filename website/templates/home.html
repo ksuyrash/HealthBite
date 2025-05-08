@@ -195,7 +195,7 @@
     }
 
     const matchedRecipes = recipes.filter(recipe => {
-      return recipe.tags.some(tag => selected.includes(tag));
+      return selected.every(preference => recipe.tags.includes(preference));
     });
 
     if (matchedRecipes.length > 0) {
